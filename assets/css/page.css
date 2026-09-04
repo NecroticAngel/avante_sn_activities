@@ -1,0 +1,154 @@
+:root {
+    --avante-main-color: #0dcdc2;
+    --avante-secondary-color: #172d72;
+    --avante-form-bg-color: #ffffff;
+    --avante-button-color: #0dcdc2;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body.avante-search-page {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: #f3f5f7;
+    color: #222;
+    min-height: 100vh;
+}
+
+.avante-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px 56px;
+}
+
+.avante-page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.avante-logo-link {
+    display: block;
+    flex-shrink: 0;
+}
+
+.avante-page-header img {
+    height: 52px;
+    width: auto;
+    display: block;
+}
+
+.avante-header-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.avante-page-header h1 {
+    margin: 0;
+    font-size: 1.35rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--avante-secondary-color);
+}
+
+.avante-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 8px;
+}
+
+.avante-nav a {
+    color: #5a6578;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+}
+
+.avante-nav a:hover,
+.avante-nav a.is-active {
+    color: var(--avante-secondary-color);
+    border-bottom-color: var(--avante-main-color);
+}
+
+.avante-setup-banner {
+    background: #fff6d8;
+    border: 1px solid #e6c35c;
+    color: #5c4a10;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.avante-setup-banner.is-visible {
+    display: block;
+}
+
+.sn_book_now_single .book-now-button {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font: inherit;
+    display: block;
+    width: 100%;
+}
+
+.sn_book_now_single .book-now-button span {
+    color: #fff;
+    font-size: 0.6em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.booking-extra-info {
+    font-size: 0.9em;
+    color: #445;
+    background: #f4f7f8;
+    padding: 10px 12px;
+    border-left: 4px solid var(--avante-main-color);
+    margin-bottom: 14px;
+}
+
+.booking-extra-info[hidden],
+.booking-child-ages[hidden],
+#booking-meal-plan-row[hidden],
+#booking-form-message[hidden] {
+    display: none;
+}
+
+.booking-child-ages {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.debug-info {
+    margin: 0 0 16px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.avante-powered-by {
+    text-align: right;
+    font-size: 0.8em;
+    margin-top: 20px;
+}
+
+.avante-powered-by a {
+    color: #888;
+    text-decoration: none;
+}

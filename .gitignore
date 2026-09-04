@@ -1,0 +1,7 @@
+config.php
+data/search-options.json
+data/activity-bookings.jsonl
+data/accommodation-bookings.jsonl
+data/*.cache
+Thumbs.db
+.DS_Store

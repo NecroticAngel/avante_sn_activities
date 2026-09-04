@@ -1,0 +1,270 @@
+/**
+ * Dynamic Styles - These styles depend on CSS variables set by PHP
+ * The CSS variables are injected inline by the PHP plugin based on admin settings
+ */
+
+/* ==========================================================================
+   COLOR-DEPENDENT STYLES USING CSS VARIABLES
+   ========================================================================== */
+
+/* Main Color Styles */
+.stock_details h3,
+h3.stock_title {
+    color: var(--avante-main-color) !important;
+}
+
+.loading,
+.result_show,
+.no_results {
+    color: var(--avante-main-color);
+}
+
+.horizontal-form input[type="submit"],
+span.sn_book_now_single,
+.sn_heading,
+.sn_book_now {
+    background-color: var(--avante-button-color) !important;
+    color: #fff !important;
+    border-radius: 6px !important;
+    padding: 10px 20px !important;
+}
+
+.ui-datepicker thead {
+    background-color: var(--avante-main-color) !important;
+}
+
+.sn_list_item_details {
+    border-left-color: var(--avante-main-color);
+}
+
+/* Secondary Color Styles */
+.sn_pricenorm,
+.sn_price,
+.sn_room_size {
+    color: var(--avante-secondary-color);
+}
+
+.qapi_booking_top {
+    background-color: var(--avante-secondary-color);
+}
+
+/* Form Background Color */
+.horizontal-form-container {
+    background-color: var(--avante-form-bg-color);
+}
+
+/* ==========================================================================
+   BOOKING OVERVIEW STYLES
+   ========================================================================== */
+
+.booking-overview {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.booking-overview h4 {
+    color: var(--avante-form-bg-color);
+    margin: 0 0 0px 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 0;
+}
+
+.overview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+}
+
+.overview-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.overview-item strong {
+    min-width: 80px;
+    color: var(--avante-secondary-color);
+    font-weight: 600;
+}
+
+.overview-item span {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Add border under accommodation details */
+.overview-content:after {
+    content: '';
+    display: block;
+    height: 2px;
+    background-color: var(--avante-form-bg-color);
+    margin-top: 0px;
+}
+
+/* ==========================================================================
+   MODAL HEADING STYLES
+   ========================================================================== */
+
+.booking-form-container h3 {
+    background-color: var(--avante-main-color);
+    color: #ffffff;
+    margin: -20px -20px 5px -20px;
+    padding: 20px;
+    border-radius: 0;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+
+
+/* ==========================================================================
+   COMPACT FORM STYLES
+   ========================================================================== */
+
+.booking-form .form-row {
+    margin-bottom: 5px;
+}
+
+.booking-form .form-group {
+    margin-bottom: 12px;
+}
+
+.booking-form label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: #333;
+}
+
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.booking-form textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+
+.booking-form .form-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* ==========================================================================
+   MORE OPTIONS STYLES
+   ========================================================================== */
+
+.submit-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+#more-options-toggle {
+    color: var(--avante-button-color);
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    min-width: 120px;
+    transition: all 0.3s ease;
+    background-color: white;
+    border: 1px solid var(--avante-button-color);
+}
+
+#more-options-toggle:hover {
+    background-color: var(--avante-button-color);
+    color: white;
+}
+
+.more-options-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-section h4 {
+    color: var(--avante-main-color);
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--avante-main-color);
+    padding-bottom: 5px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.filter-item label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.filter-item input[type="checkbox"] {
+    width: auto;
+}
+
+/* ==========================================================================
+   BUTTON STYLES
+   ========================================================================== */
+
+/* General .btn-submit styles */
+.btn-submit {
+    background-color: var(--avante-button-color);
+    color: white;
+    border: 1px solid var(--avante-button-color);
+    border-radius: 4px;
+}
+
+.btn-submit:hover {
+    background-color: var(--avante-button-color);
+    filter: brightness(0.9);
+}
+
+/* Specific booking form button overrides */
+.booking-form .btn-submit {
+    background-color: var(--avante-button-color);
+    color: #ffffff;
+    border: 1px solid var(--avante-button-color);
+    border-radius: 4px;
+}
+
+.booking-form .btn-submit:hover {
+    filter: brightness(0.95);
+}
+
+.booking-form .btn-cancel {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+}
+
+.booking-form .btn-cancel:hover {
+    filter: brightness(0.95);
+}

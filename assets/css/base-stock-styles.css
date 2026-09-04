@@ -1,0 +1,1254 @@
+/**
+ * Base Stock Styles - Cleaned and Optimized
+ * Custom CSS for the Avante Travel Search Plugin
+ * Last updated: 2024
+ */
+
+/* ==========================================================================
+   CORE LAYOUT STYLES
+   ========================================================================== */
+
+.stock_wrapper {
+    width: 100%;
+}
+
+.stock_item {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* Featured Resort Banner */
+.featured-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--avante-button-color) !important;
+    color: #fff;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 8px 0 8px 0;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.featured-banner::before {
+    content: "⭐";
+    font-size: 14px;
+}
+
+.featured-banner::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 6px solid #CC8400;
+    border-bottom: 6px solid transparent;
+}
+
+.stock_item_header {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.stock_details {
+    flex: 1;
+    padding-left: 0px;
+}
+
+.stock_details h3 {
+    text-transform: uppercase;
+    color: var(--avante-main-color, #0DCDC2) !important;
+}
+
+h3.stock_title {
+    text-transform: uppercase;
+    color: var(--avante-main-color, #0DCDC2) !important;
+}
+
+.stock_location {
+    margin-bottom: 13px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.stock_description {
+    color: #666;
+}
+
+.stock_availability {
+    margin-top: 15px;
+}
+
+/* ==========================================================================
+   SEARCH FORM STYLES
+   ========================================================================== */
+
+.horizontal-form-container {
+    background-color: var(--avante-form-bg-color, #ffffff);
+    padding: 20px 10px 20px 10px;
+    margin: 0;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+        rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, 
+        rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    border-radius: 6px;
+    margin-bottom: 30px;
+}
+
+.horizontal-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.horizontal-form input[type="text"].small {
+    color: #666565;
+    color: rgb(102, 101, 101);
+	border: 1px solid rgb(223, 218, 218);
+	padding-left: 34px !important;
+	box-sizing: border-box;
+	box-sizing: border-box;
+	font-family: inherit;
+	font-size: 1rem;
+	line-height: 1.5;
+	margin: 0px;
+	width: 100%;
+	border: 1px solid rgb(102, 102, 102);
+	border-radius: 3px;
+	padding: 0.5rem 1rem;
+	transition: 0.3s;
+	border-color: rgb(51, 51, 51);
+	overflow: visible;
+	outline: 0px;
+    background-color: #fff;
+}
+
+.horizontal-form input[type="text"].large, input#destination, input#daterange {
+    flex: 2;
+    color: rgb(102, 101, 101);
+	border: 1px solid rgb(223, 218, 218);
+	padding-left: 34px !important;
+	box-sizing: border-box;
+	box-sizing: border-box;
+	font-family: inherit;
+	font-size: 1rem;
+	line-height: 1.5;
+	margin: 0px;
+	width: 100%;
+	border: 1px solid rgb(102, 102, 102);
+	border-radius: 3px;
+	padding: 0.5rem 1rem;
+	transition: 0.3s;
+	border-color: rgb(51, 51, 51);
+	overflow: visible;
+	outline: 0px;
+    background-color: #fff;
+}
+
+.horizontal-form select {
+    flex: 1;
+    min-width: 150px;
+    border: 1px solid #dfdada;
+    color: #666565;
+    padding-left: 31px;
+    margin-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+	background-color: #fff;
+}
+
+.horizontal-form input[type="submit"] {
+    border: 0px solid #fff;
+    flex: 1;
+    padding: 10px 20px;
+    height: 100%;
+}
+
+/* Input Container Styles */
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-container.dates {
+    width: 13%;
+}
+
+.input-container.date-range {
+    width: 30%;
+    min-width: 280px;
+}
+
+.input-container .daterange-input {
+    width: 100%;
+    min-width: 260px;
+}
+
+.input-container.destination {
+    flex-grow: 2;
+}
+
+.input-container input[type="text"] {
+    padding-left: 34px !important;
+}
+
+.input-container svg {
+    position: absolute;
+    left: 10px;
+    width: 15px;
+    height: 100%;
+    fill: #666565;
+    pointer-events: none;
+}
+
+.input-container2 {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-grow: 2;
+}
+
+.input-container2 svg {
+    position: absolute;
+    left: 10px;
+    width: 15px;
+    height: 100%;
+    fill: #666565;
+    pointer-events: none;
+    top: 0px;
+}
+
+/* Submit Button Container */
+.input-container .submit-button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    flex-grow: 0;
+}
+
+.input-container .submit-button-container a,
+.input-container .submit-button-container input[type="submit"] {
+    background-color: #ffffff;
+    color: var(--avante-button-color, #0dcdc2);
+    border: 1px solid var(--avante-button-color, #0dcdc2);
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    min-width: 120px;
+    transition: all 0.3s ease;
+    font-size: 13px;
+}
+
+.input-container .submit-button-container a:hover,
+.input-container .submit-button-container input[type="submit"]:hover {
+    background-color: var(--avante-button-color, #0dcdc2);
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Clear Destination Button */
+button#clear-destination {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 500;
+    background-color: transparent;
+    color: #6d6767;
+    border: 0px solid #fff;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.2em;
+}
+
+/* ==========================================================================
+   PROPERTY LISTING STYLES
+   ========================================================================== */
+
+.sn_list_item_details {
+    background-color: #f9f9f9;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border-left: 3px solid var(--avante-main-color, #0dcdc2);
+}
+
+.sn_room_size {
+    font-family: "Barlow", Sans-serif;
+    font-size: 1.1em;
+    color: var(--avante-secondary-color, #172d72);
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.sn_roomtype {
+    font-weight: 600;
+}
+
+.sn_roomsize {
+    margin-left: 10px;
+}
+
+.sn_units_available {
+    margin-left: auto;
+    font-weight: 600;
+    color: var(--avante-secondary-color, #172d72);
+}
+
+.sn_roomdesc {
+    font-size: 12px;
+    color: #4a4343;
+    font-weight: 400;
+}
+
+.sn_item_details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.sn_dates {
+    float: left;
+}
+
+.sn_nights {
+    text-align: right;
+}
+
+.sn_pricenorm {
+    color: var(--avante-secondary-color, #172d72);
+    text-decoration: line-through;
+}
+
+.sn_price {
+    color: var(--avante-secondary-color, #172d72);
+    font-weight: 600;
+    text-align: right;
+    font-size: 22px;
+}
+
+span.strike {
+    text-decoration: line-through;
+    color: red;
+}
+
+/* Book Now Button */
+span.sn_book_now_single {
+    background-color: var(--avante-main-color, #0dcdc2);
+    padding: 0px 6px 5px 6px;
+    border-radius: 3px;
+    font-size: 23px;
+    line-height: 16px;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 auto;
+    float: right;
+}
+
+.sn_cashback {
+    margin-bottom: 15px;
+    padding-bottom: 0px;
+    border-bottom: 1px solid #000;
+    background: #ff9c34;
+    line-height: 24px;
+}
+
+.stock_external.open-modal-button span {
+    color: #fff;
+    font-size: 0.6em;
+}
+
+/* ==========================================================================
+   IMAGE GALLERY STYLES
+   ========================================================================== */
+
+.sn_imagebar {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+}
+
+.slideshow {
+    width: 100%;
+    height: 210px;
+    position: relative;
+    overflow: hidden;
+}
+
+.slideshow-container {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+    gap: 2px;
+    height: 100%;
+}
+
+.res_img {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.slideshow-container .res_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* ==========================================================================
+   MODAL STYLES
+   ========================================================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    position: relative;
+    width: 90vw;
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.booking-form-modal {
+    width: 90vw;
+    max-width: 500px;
+    height: auto;
+    max-height: 90vh !important;
+    overflow-y: auto;
+}
+
+.iframe-modal {
+    width: 90vw;
+    max-width: none;
+    max-height: none;
+}
+
+.iframe-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.iframe-container h3 {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 17px;
+    flex-shrink: 0;
+    margin-top: -10px;
+}
+
+.iframe-container iframe {
+    flex: 1;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+}
+
+iframe#iframeContent {
+    height: auto;
+    max-height: 90vh;
+    min-height: 90vh;
+}
+
+.modal-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: #fff;
+    color: #333;
+    border: 2px solid #333;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    line-height: 26px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 10001;
+}
+
+/* ==========================================================================
+   BOOKING FORM STYLES
+   ========================================================================== */
+
+.booking-form-container {
+    padding: 20px;
+}
+
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    flex: 1 1 100%;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9em;
+}
+
+.booking-form br {
+    display: none !important;
+}
+
+.booking-form p {
+    margin: 0;
+}
+
+.booking-form p:empty {
+    display: none;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--avante-main-color, #0dcdc2);
+    box-shadow: 0 0 0 2px rgba(13, 205, 194, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-cancel,
+.btn-submit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+}
+
+.btn-cancel:hover {
+    background-color: #e2e6ea;
+}
+
+/* Button submit styles moved to dynamic-styles.css */
+.btn-submit:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.form-message {
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.form-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.form-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.form-message p {
+    margin: 0;
+}
+
+/* ==========================================================================
+   VOUCHER FORM STYLES
+   ========================================================================== */
+
+.voucher-form-container form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.input_container_voucher {
+    flex: 1 1 22%;
+    min-width: 180px;
+}
+
+.input_container_voucher.half-width {
+    flex: 0 1 11%;
+    min-width: 100px;
+}
+
+.input_container_voucher input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.voucher-form-container input[type="submit"] {
+    flex: 0 1 11%;
+    min-width: 100px;
+}
+
+/* ==========================================================================
+   STATUS & MESSAGE STYLES
+   ========================================================================== */
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    font-family: "Montserrat", Sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3em;
+    color: var(--avante-main-color, #0dcdc2);
+}
+
+.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.error-message-api {
+    text-align: center;
+    padding: 30px;
+    font-weight: 600;
+}
+
+.result_show {
+    margin-top: 50px;
+    padding-top: 20px;
+    font-size: 20px;
+    color: var(--avante-main-color, #0dcdc2);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: "Maven Pro", sans-serif;
+    font-weight: 800;
+    letter-spacing: 4px;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.no_results {
+    font-size: 20px;
+    color: var(--avante-main-color, #0dcdc2);
+    font-weight: 600;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+/* ==========================================================================
+   UTILITY STYLES
+   ========================================================================== */
+
+.show-more-container {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.show-more-button {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.show-more-button:hover {
+    background-color: #e9e9e9;
+}
+
+.hidden_units {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+}
+
+.debug-info {
+    font-size: 0.8em;
+    color: #888;
+    margin-top: -20px;
+}
+
+.resort-info-link,
+.unit-info-link {
+    margin-right: 8px;
+}
+
+.unit-info-link svg {
+    vertical-align: middle;
+}
+
+.location-icon {
+    color: #666;
+    margin-bottom: -2px;
+}
+
+hr {
+    height: 1px;
+    clear: both;
+}
+
+/* ==========================================================================
+   DATEPICKER STYLES
+   ========================================================================== */
+
+.ui-datepicker thead {
+    background: var(--avante-main-color, #0dcdc2) !important;
+    color: #ffffff !important;
+}
+
+.ui-datepicker .ui-widget-header,
+.ui-datepicker .ui-datepicker-header {
+    background: #ffffff !important;
+    color: #ffffff !important;
+}
+
+.ui-datepicker .ui-datepicker-title select.ui-datepicker-month,
+.ui-datepicker .ui-datepicker-title select.ui-datepicker-year {
+    float: left;
+}
+
+.ui-datepicker .ui-datepicker-title select.ui-datepicker-month {
+    width: 44%;
+    margin-right: 10px;
+}
+
+.ui-datepicker .ui-datepicker-title select.ui-datepicker-year {
+    width: 50%;
+}
+
+span.ui-datepicker-year {
+    color: #000;
+}
+
+/* Date Range Picker Styles - Sleek Design */
+.ui-datepicker.daterange-picker {
+    width: 560px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 13px;
+    padding: 8px;
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-group-container {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-group {
+    float: left !important;
+    margin: 0 15px !important;
+    width: 240px !important;
+    display: inline-block !important;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-group:first-child {
+    margin-left: 0;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-group:last-child {
+    margin-right: 0;
+}
+
+/* Sleek calendar styling */
+.ui-datepicker.daterange-picker table {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-calendar td {
+    padding: 1px;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-calendar td a {
+    display: block;
+    padding: 6px 8px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.2;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-calendar td a:hover {
+    background: #f5f5f5;
+    border-color: #d0d0d0;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-calendar td.ui-datepicker-today a {
+    background: #f0f8ff;
+    color: var(--avante-main-color, #0dcdc2);
+    font-weight: 600;
+}
+
+/* Sleek header styling */
+.ui-datepicker.daterange-picker .ui-datepicker-header {
+    background: var(--avante-main-color, #0dcdc2) !important;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    padding: 8px;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-title {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+}
+
+/* Hide dropdowns but show static text */
+.ui-datepicker.daterange-picker .ui-datepicker-title select {
+    display: none !important;
+}
+
+/* Make month and year text white and visible */
+.ui-datepicker.daterange-picker .ui-datepicker-title .ui-datepicker-month,
+.ui-datepicker.daterange-picker .ui-datepicker-title .ui-datepicker-year {
+    display: inline !important;
+    color: white !important;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-prev,
+.ui-datepicker.daterange-picker .ui-datepicker-next {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    top: 6px;
+}
+
+.ui-datepicker.daterange-picker .ui-datepicker-prev:hover,
+.ui-datepicker.daterange-picker .ui-datepicker-next:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Date Range Selection Highlighting - Sleek */
+.ui-datepicker td.date-range-selected a,
+.ui-datepicker td.date-range-selected span {
+    background: rgba(13, 205, 194, 0.2) !important;
+    color: var(--avante-main-color, #0dcdc2) !important;
+    border-color: rgba(13, 205, 194, 0.3) !important;
+}
+
+.ui-datepicker td.date-range-start a,
+.ui-datepicker td.date-range-start span {
+    background: var(--avante-main-color, #0dcdc2) !important;
+    color: #ffffff !important;
+    border-radius: 4px 0 0 4px;
+    font-weight: 600;
+}
+
+.ui-datepicker td.date-range-end a,
+.ui-datepicker td.date-range-end span {
+    background: var(--avante-main-color, #0dcdc2) !important;
+    color: #ffffff !important;
+    border-radius: 0 4px 4px 0;
+    font-weight: 600;
+}
+
+/* Both start and end on same day */
+.ui-datepicker td.date-range-start.date-range-end a,
+.ui-datepicker td.date-range-start.date-range-end span {
+    border-radius: 4px;
+}
+
+/* Weekday headers - sleeker */
+.ui-datepicker.daterange-picker .ui-datepicker-calendar th {
+    padding: 4px 2px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ui-datepicker.daterange-picker thead {
+    background: #f8f9fa !important;
+    border-radius: 4px;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE STYLES
+   ========================================================================== */
+
+@media only screen and (max-width: 768px) {
+    /* Form Container */
+    .horizontal-form-container {
+        padding: 13px 13px !important;
+    }
+    
+    .input-container.date-range {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .input-container .daterange-input {
+        min-width: auto;
+    }
+    
+    .input-container.destination {
+        flex-grow: 1 !important;
+        width: 100%;
+    }
+    
+    /* Date Picker on Mobile - Stack months vertically but keep sleek design */
+    .ui-datepicker.daterange-picker {
+        width: 300px;
+        max-width: 100%;
+        padding: 6px;
+        flex-direction: column !important;
+    }
+    
+    .ui-datepicker.daterange-picker .ui-datepicker-group-container {
+        flex-direction: column !important;
+    }
+    
+    .ui-datepicker.daterange-picker .ui-datepicker-group {
+        float: none !important;
+        margin: 0 0 15px 0 !important;
+        width: 100% !important;
+        max-width: 280px !important;
+        display: block !important;
+    }
+    
+    .ui-datepicker.daterange-picker .ui-datepicker-group:last-child {
+        margin-bottom: 0 !important;
+    }
+    
+    .ui-datepicker.daterange-picker .ui-datepicker-calendar td a {
+        padding: 8px 10px;
+        font-size: 13px;
+        min-width: 28px;
+        min-height: 28px;
+    }
+    
+    .input-container .submit-button-container {
+        gap: 5px !important;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .input-container2 {
+        flex-grow: 1 !important;
+        align-items: stretch;
+    }
+    
+    .input-container .submit-button-container input[type="submit"] {
+        width: 100%;
+    }
+    
+    .horizontal-form select {
+        min-width: 0px !important;
+    }
+    
+    .input-container {
+        flex-grow: 1 !important;
+    }
+    
+    /* Property Details */
+    .sn_description {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    
+    /* Stock Layout */
+    .stock_image {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .stock_details {
+        flex: 0 0 100%;
+        padding-left: 0;
+    }
+    
+    /* Slideshow */
+    .res_img {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+    
+    /* Booking Form Modal */
+    .booking-form-modal {
+        width: 95vw;
+        margin: 10px;
+        max-height: 90vh;
+    }
+    
+    .booking-form-container {
+        padding: 15px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+    }
+    
+    /* Voucher Form */
+    .input_container_voucher,
+    .input_container_voucher.half-width,
+    .voucher-form-container input[type="submit"] {
+        flex: 1 1 100%;
+    }
+}
+
+/* ==========================================================================
+   AUTOCOMPLETE STYLES - BOOKING.COM STYLE
+   ========================================================================== */
+
+.ui-autocomplete {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 8px 0;
+    z-index: 1000;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.ui-autocomplete .ui-menu-item {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper {
+    padding: 0;
+    border: none;
+    background: none;
+    margin: 0;
+}
+
+.autocomplete-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.ui-state-focus .autocomplete-item {
+    background-color: #f8f9fa;
+}
+
+.autocomplete-icon-container {
+    flex-shrink: 0;
+    margin-right: 12px;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.autocomplete-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.accommodation-icon {
+    color: #007bff;
+}
+
+.location-icon {
+    color: #28a745;
+}
+
+.autocomplete-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.autocomplete-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2px;
+    font-size: 14px;
+    line-height: 1.3;
+}
+
+.autocomplete-location {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.3;
+    margin: 0;
+}
+
+/* Ensure proper spacing and alignment */
+.ui-autocomplete .ui-menu-item:first-child .autocomplete-item {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.ui-autocomplete .ui-menu-item:last-child .autocomplete-item {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .ui-autocomplete {
+        font-size: 13px;
+    }
+    
+    .autocomplete-item {
+        padding: 10px 12px;
+    }
+    
+    .autocomplete-icon-container {
+        margin-right: 10px;
+        width: 18px;
+        height: 18px;
+    }
+    
+    .autocomplete-icon {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .autocomplete-label {
+        font-size: 13px;
+    }
+    
+    .autocomplete-location {
+        font-size: 12px;
+    }
+}
+
+/* Destination autocomplete loading spinner */
+.input-container.destination .destination-spinner {
+    display: none;
+    position: absolute;
+    right: 34px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    margin-top: -7px;
+    border: 2px solid rgba(109, 103, 103, 0.25);
+    border-top-color: #6d6767;
+    border-radius: 50%;
+    z-index: 501;
+    pointer-events: none;
+    animation: avante-destination-spin 0.7s linear infinite;
+}
+
+.input-container.destination.is-loading .destination-spinner {
+    display: block;
+}
+
+@keyframes avante-destination-spin {
+    to { transform: rotate(360deg); }
+}
