@@ -130,12 +130,11 @@ function h($value): string
             <div class="admin-bar">
                 <a class="admin-add" href="index.php?new=1">Add activity</a>
                 <a href="bookings.php">Bookings</a>
+                <a href="codes.php">Members &amp; vouchers</a>
+                <a href="settings.php">Settings</a>
                 <a href="<?php echo h($base); ?>activities.php">View public page</a>
                 <a href="index.php?logout=1">Sign out</a>
             </div>
-            <?php if (trim((string) ($config['avante_booking_email'] ?? '')) === ''): ?>
-                <div class="admin-banner is-bad">Set <code>avante_booking_email</code> in <code>config.php</code> so Avante gets a copy of every Make booking request. Each activity also has its own “Send bookings to” address.</div>
-            <?php endif; ?>
 
             <?php if ($editing): ?>
                 <form class="admin-form" method="post">
@@ -165,7 +164,7 @@ function h($value): string
                         </label>
                         <label>Send bookings to
                             <input type="text" name="booking_email" placeholder="operator@example.com" value="<?php echo h($editing['booking_email'] ?? ''); ?>">
-                            <span class="admin-hint">Operator inbox for Make booking requests. Avante also gets a copy from config.php.</span>
+                            <span class="admin-hint">Operator inbox for this activity. A copy also goes to the catch-all addresses in Settings.</span>
                         </label>
                         <label class="full">Website URL
                             <input type="url" name="booking_url" value="<?php echo h($editing['booking_url'] ?? ''); ?>">

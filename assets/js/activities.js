@@ -181,12 +181,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     return data;
                 });
-            }).then(function() {
+            }).then(function(data) {
                 form.hidden = true;
                 messageEl.hidden = false;
                 messageEl.className = 'activity-booking-message is-ok';
-                messageEl.innerHTML = '<p><strong>Thank you.</strong> We have your request and will be in touch to confirm.</p>';
-                setTimeout(closeModal, 2800);
+                var ref = data.reference ? ' Reference: ' + data.reference + '.' : '';
+                var extra = data.reference ? ' <a href="manage.php?ref=' + encodeURIComponent(data.reference) + '">View this booking</a>' : '';
+                messageEl.innerHTML = '<p><strong>Thank you.</strong> We have your request and will be in touch to confirm.' + ref + extra + '</p>';
             }).catch(function(error) {
                 messageEl.hidden = false;
                 messageEl.className = 'activity-booking-message is-bad';

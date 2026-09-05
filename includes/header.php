@@ -13,7 +13,8 @@ $bodyClass = $bodyClass ?? 'avante-search-page';
     <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
     <link rel="stylesheet" href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>assets/css/page.css">
     <?php foreach ($extraCss as $href): ?>
-        <link rel="stylesheet" href="<?php echo htmlspecialchars($base . $href, ENT_QUOTES, 'UTF-8'); ?>">
+        <?php $cssHref = preg_match('#^https?://#i', (string) $href) ? $href : $base . $href; ?>
+        <link rel="stylesheet" href="<?php echo htmlspecialchars($cssHref, ENT_QUOTES, 'UTF-8'); ?>">
     <?php endforeach; ?>
 </head>
 <body class="<?php echo htmlspecialchars($bodyClass, ENT_QUOTES, 'UTF-8'); ?>">
@@ -26,7 +27,9 @@ $bodyClass = $bodyClass ?? 'avante-search-page';
                 <h1><?php echo htmlspecialchars($headerTitle ?? $pageTitle, ENT_QUOTES, 'UTF-8'); ?></h1>
                 <nav class="avante-nav" aria-label="Primary">
                     <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>index.php"<?php echo $activeNav === 'search' ? ' class="is-active"' : ''; ?>>Accommodation</a>
+                    <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>holiday.php"<?php echo $activeNav === 'holiday' ? ' class="is-active"' : ''; ?>>Holiday builder</a>
                     <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>activities.php"<?php echo $activeNav === 'activities' ? ' class="is-active"' : ''; ?>>Activities</a>
+                    <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>manage.php"<?php echo $activeNav === 'manage' ? ' class="is-active"' : ''; ?>>Manage booking</a>
                 </nav>
             </div>
         </header>

@@ -153,9 +153,11 @@ function avante_default_meal_plan_id(array $info, $selected)
     return null;
 }
 
-function avante_handle_accommodation_booking(array $config): array
+function avante_handle_accommodation_booking(array $config, ?array $input = null): array
 {
-    $input = avante_json_body();
+    if ($input === null) {
+        $input = avante_json_body();
+    }
 
     $fullName = trim((string) ($input['fullName'] ?? $input['full_name'] ?? ''));
     $email = trim((string) ($input['emailAddress'] ?? $input['email'] ?? ''));
@@ -255,6 +257,10 @@ function avante_handle_accommodation_booking(array $config): array
         'isRequestAndPay' => false,
         'items' => [$stay],
     ];
+    $membershipNo = trim((string) ($input['membershipNo'] ?? $input['voucherCode'] ?? ''));
+    if ($membershipNo !== '') {
+        $payload['membershipNo'] = $membershipNo;
+    }
 
     $result = avante_sn_post($config, '/request', $payload);
     $status = (string) ($result['status'] ?? '');
@@ -285,26 +291,25 @@ function avante_handle_accommodation_booking(array $config): array
         'paymentUrl' => $result['paymentUrl'] ?? null,
         'reservationInformationUrl' => $result['reservationInformationUrl'] ?? null,
         'notes' => $notes,
+        'membershipNo' => $membershipNo,
     ];
 
     $logPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'accommodation-bookings.jsonl';
     file_put_contents($logPath, json_encode($record, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND);
 
-    $avanteEmail = trim((string) ($config['avante_booking_email'] ?? ''));
-    if ($avanteEmail !== '') {
-        require_once __DIR__ . '/activities-store.php';
-        $recipients = avante_parse_email_list($avanteEmail);
-        if ($recipients) {
-            $subject = 'Accommodation booking — ' . ($resortName !== '' ? $resortName : 'Stock Network');
-            $body = "A booking request was sent to Stock Network from the Avante site.\n\n";
-            $body .= 'Reference: ' . ($result['reservationRefNo'] ?? 'n/a') . "\n";
-            $body .= 'Status: ' . ($result['reservationStatus'] ?? $status) . "\n";
-            $body .= 'Resort: ' . $resortName . "\n";
-            $body .= 'Unit: ' . $unitName . "\n";
-            $body .= 'Dates: ' . $checkIn . ' to ' . $checkOut . "\n";
-            $body .= 'Guest: ' . $fullName . ' / ' . $email . ' / ' . $phone . "\n";
-            avante_send_mail(implode(', ', $recipients), $subject, $body, "Content-Type: text/plain; charset=UTF-8\r\nFrom: Avante Travel <noreply@localhost>");
-        }
+    require_once __DIR__ . '/settings-store.php';
+    require_once __DIR__ . '/activities-store.php';
+    $recipients = avante_catch_all_emails($config);
+    if ($recipients) {
+        $subject = 'Accommodation booking — ' . ($resortName !== '' ? $resortName : 'Stock Network');
+        $body = "A booking request was sent to Stock Network from the Avante site.\n\n";
+        $body .= 'Reference: ' . ($result['reservationRefNo'] ?? 'n/a') . "\n";
+        $body .= 'Status: ' . ($result['reservationStatus'] ?? $status) . "\n";
+        $body .= 'Resort: ' . $resortName . "\n";
+        $body .= 'Unit: ' . $unitName . "\n";
+        $body .= 'Dates: ' . $checkIn . ' to ' . $checkOut . "\n";
+        $body .= 'Guest: ' . $fullName . ' / ' . $email . ' / ' . $phone . "\n";
+        avante_send_mail(implode(', ', $recipients), $subject, $body, "Content-Type: text/plain; charset=UTF-8\r\nFrom: Avante Travel <noreply@localhost>");
     }
 
     return [

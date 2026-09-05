@@ -178,23 +178,27 @@ function avante_activity_delete(string $id): void
     avante_activities_write($items);
 }
 
-function avante_parse_email_list(string $raw): array
-{
-    $emails = [];
-    foreach (preg_split('/[,;]+/', $raw) as $part) {
-        $email = filter_var(trim($part), FILTER_VALIDATE_EMAIL);
-        if ($email) {
-            $emails[] = $email;
+if (!function_exists('avante_parse_email_list')) {
+    function avante_parse_email_list(string $raw): array
+    {
+        $emails = [];
+        foreach (preg_split('/[,;]+/', $raw) as $part) {
+            $email = filter_var(trim($part), FILTER_VALIDATE_EMAIL);
+            if ($email) {
+                $emails[] = $email;
+            }
         }
+        return array_values(array_unique($emails));
     }
-    return array_values(array_unique($emails));
 }
 
-function avante_handle_activity_booking(array $config): array
+function avante_handle_activity_booking(array $config, ?array $input = null): array
 {
-    $input = $_POST;
-    if (empty($input['activity_id'])) {
-        $input = array_merge($input, function_exists('avante_json_body') ? avante_json_body() : []);
+    if ($input === null) {
+        $input = $_POST;
+        if (empty($input['activity_id'])) {
+            $input = array_merge($input, function_exists('avante_json_body') ? avante_json_body() : []);
+        }
     }
 
     $activityId = trim((string) ($input['activity_id'] ?? ''));
@@ -217,18 +221,20 @@ function avante_handle_activity_booking(array $config): array
         throw new RuntimeException('That activity is not available to book.');
     }
 
+    require_once __DIR__ . '/settings-store.php';
     $recipients = avante_parse_email_list((string) ($activity['booking_email'] ?? ''));
     if (!$recipients) {
         $recipients = avante_parse_email_list((string) ($activity['email'] ?? ''));
     }
-    $recipients = array_merge($recipients, avante_parse_email_list((string) ($config['avante_booking_email'] ?? '')));
+    $recipients = array_merge($recipients, avante_catch_all_emails($config));
     $recipients = array_values(array_unique($recipients));
     if (!$recipients) {
-        throw new RuntimeException('No booking email is set for this activity or Avante yet. Add them in admin / config.php.');
+        throw new RuntimeException('No booking email is set for this activity or Avante yet. Add a catch-all in admin Settings.');
     }
 
     $record = [
         'at' => date('c'),
+        'reference' => 'ACT-' . strtoupper(bin2hex(random_bytes(4))),
         'activity_id' => $activityId,
         'activity' => $activity['name'] ?? '',
         'company' => $activity['company'] ?? '',
@@ -272,7 +278,7 @@ function avante_handle_activity_booking(array $config): array
     ];
     $sent = avante_send_mail(implode(', ', $recipients), $subject, $body, implode("\r\n", $headers));
 
-    return ['ok' => true, 'emailed' => $sent];
+    return ['ok' => true, 'emailed' => $sent, 'reference' => $record['reference']];
 }
 
 function avante_send_mail(string $to, string $subject, string $body, string $headers): bool

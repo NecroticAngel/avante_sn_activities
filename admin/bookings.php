@@ -71,6 +71,8 @@ require dirname(__DIR__) . '/includes/header.php';
             <div class="admin-bar">
                 <a class="admin-add" href="bookings.php">Bookings</a>
                 <a href="index.php">Activities</a>
+                <a href="codes.php">Members &amp; vouchers</a>
+                <a href="settings.php">Settings</a>
                 <a href="<?php echo h($base); ?>index.php">View search</a>
                 <a href="index.php?logout=1">Sign out</a>
             </div>
@@ -95,6 +97,7 @@ require dirname(__DIR__) . '/includes/header.php';
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th>Reference</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -132,6 +135,9 @@ require dirname(__DIR__) . '/includes/header.php';
                                                 <?php endif; ?>
                                             </div>
                                         <?php endif; ?>
+                                    </td>
+                                    <td class="admin-row-actions">
+                                        <a href="booking.php?ref=<?php echo urlencode((string) $row['reference']); ?>&email=<?php echo urlencode((string) $row['guest_email']); ?>">View</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -19,7 +19,9 @@
                 <h1>Search accommodation</h1>
                 <nav class="avante-nav" aria-label="Primary">
                     <a href="index.php" class="is-active">Accommodation</a>
+                    <a href="holiday.php">Holiday builder</a>
                     <a href="activities.php">Activities</a>
+                    <a href="manage.php">Manage booking</a>
                 </nav>
             </div>
         </header>
@@ -133,6 +135,12 @@
                                 <div class="form-group">
                                     <label for="booking_meal_plan">Meal plan</label>
                                     <select id="booking_meal_plan" name="mealRatePlanId"></select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="booking_code">Member / voucher code</label>
+                                    <input type="text" id="booking_code" name="membership_no" placeholder="Optional">
                                 </div>
                             </div>
                             <div class="form-row">

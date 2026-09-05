@@ -136,6 +136,17 @@ body.avante-search-page {
     margin-bottom: 8px;
 }
 
+.avante-lede {
+    color: #445;
+    margin: 0 0 20px;
+    max-width: 42rem;
+}
+
+.booking-card h2 {
+    margin: 0 0 6px;
+    color: var(--avante-secondary-color);
+}
+
 .debug-info {
     margin: 0 0 16px;
     font-size: 0.85rem;

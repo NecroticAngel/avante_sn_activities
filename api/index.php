@@ -7,6 +7,8 @@ header('Cache-Control: no-store');
 $config = avante_load_config();
 $action = avante_request_action();
 require_once __DIR__ . '/stock-booking.php';
+require_once __DIR__ . '/sn-people.php';
+require_once __DIR__ . '/bookings-store.php';
 
 try {
     switch ($action) {
@@ -54,6 +56,28 @@ try {
             avante_json(avante_handle_accommodation_booking($config));
             break;
 
+        case 'booking_lookup':
+            avante_json(avante_handle_booking_lookup());
+            break;
+
+        case 'validate_member':
+            avante_json(avante_handle_validate_member($config));
+            break;
+
+        case 'validate_voucher':
+            avante_json(avante_handle_validate_voucher($config));
+            break;
+
+        case 'upload_voucher':
+            avante_require_admin();
+            avante_json(avante_handle_upload_voucher($config));
+            break;
+
+        case 'upload_member':
+            avante_require_admin();
+            avante_json(avante_handle_upload_member($config));
+            break;
+
         case 'activities':
             require_once __DIR__ . '/activities-store.php';
             avante_json([
@@ -68,6 +92,11 @@ try {
             avante_json(avante_handle_activity_booking($config));
             break;
 
+        case 'holiday_checkout':
+            require_once __DIR__ . '/holiday-store.php';
+            avante_json(avante_handle_holiday_checkout($config));
+            break;
+
         default:
             http_response_code(400);
             avante_json(['ok' => false, 'error' => 'Unknown action.']);
@@ -75,6 +104,16 @@ try {
 } catch (Throwable $e) {
     http_response_code($e instanceof RuntimeException ? 400 : 500);
     avante_json(['ok' => false, 'error' => $e->getMessage()]);
+}
+
+function avante_require_admin(): void
+{
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+    if (empty($_SESSION['avante_admin'])) {
+        throw new RuntimeException('Sign in to admin to use this tool.');
+    }
 }
 
 function avante_request_action(): string

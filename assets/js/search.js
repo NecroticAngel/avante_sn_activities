@@ -623,6 +623,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 emailAddress: bookingForm.elements.email.value,
                 cellphone: bookingForm.elements.phone.value,
                 notes: bookingForm.elements.message.value,
+                membershipNo: (bookingForm.elements.membership_no && bookingForm.elements.membership_no.value) || '',
                 adultOccupancy: bookingForm.elements.adults.value,
                 childOccupancy: children,
                 childAges: childAges,
@@ -659,7 +660,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }).then(function(data) {
                 bookingForm.hidden = true;
                 var ref = data.reservationRefNo ? ' Reference: ' + data.reservationRefNo + '.' : '';
-                showBookingMessage('success', '<p><strong>Thank you.</strong> Your booking request has been sent to Stock Network.' + esc(ref) + '</p>');
+                var extra = '';
+                if (data.reservationRefNo) {
+                    extra += ' <a href="manage.php?ref=' + encodeURIComponent(data.reservationRefNo) + '">View this booking</a>';
+                }
+                if (data.paymentUrl) {
+                    extra += ' <a href="' + esc(data.paymentUrl) + '" target="_blank" rel="noopener noreferrer">Pay on Stock Network</a>';
+                }
+                showBookingMessage('success', '<p><strong>Thank you.</strong> Your booking request has been sent to Stock Network.' + esc(ref) + extra + '</p>');
             }).catch(function(error) {
                 showBookingMessage('error', esc(error.message));
             }).finally(function() {

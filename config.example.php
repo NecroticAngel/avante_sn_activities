@@ -15,3 +15,5 @@ return [
     'admin_password' => 'change-me',
     'avante_booking_email' => '',
 ];
+// Catch-all booking copies are configured in admin Settings.
+// avante_booking_email is only a fallback if Settings is empty.
