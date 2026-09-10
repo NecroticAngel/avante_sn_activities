@@ -27,6 +27,7 @@ $bodyClass = $bodyClass ?? 'avante-search-page';
                 <h1><?php echo htmlspecialchars($headerTitle ?? $pageTitle, ENT_QUOTES, 'UTF-8'); ?></h1>
                 <nav class="avante-nav" aria-label="Primary">
                     <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>index.php"<?php echo $activeNav === 'search' ? ' class="is-active"' : ''; ?>>Accommodation</a>
+                    <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>map.php"<?php echo $activeNav === 'map' ? ' class="is-active"' : ''; ?>>Property map</a>
                     <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>holiday.php"<?php echo $activeNav === 'holiday' ? ' class="is-active"' : ''; ?>>Holiday builder</a>
                     <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>activities.php"<?php echo $activeNav === 'activities' ? ' class="is-active"' : ''; ?>>Activities</a>
                     <a href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>manage.php"<?php echo $activeNav === 'manage' ? ' class="is-active"' : ''; ?>>Manage booking</a>

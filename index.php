@@ -19,6 +19,7 @@
                 <h1>Search accommodation</h1>
                 <nav class="avante-nav" aria-label="Primary">
                     <a href="index.php" class="is-active">Accommodation</a>
+                    <a href="map.php">Property map</a>
                     <a href="holiday.php">Holiday builder</a>
                     <a href="activities.php">Activities</a>
                     <a href="manage.php">Manage booking</a>

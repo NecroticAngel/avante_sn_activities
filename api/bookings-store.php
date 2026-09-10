@@ -96,7 +96,42 @@ function avante_normalize_accommodation(array $row): array
         'check_in' => $checkIn,
         'check_out' => $checkOut,
         'membership_no' => (string) ($row['membershipNo'] ?? ''),
+        'has_sn_response' => is_array($row['sn_response'] ?? null),
     ];
+}
+
+function avante_find_accommodation_record(string $reference, string $email): ?array
+{
+    $reference = strtoupper(trim($reference));
+    $email = strtolower(trim($email));
+    if ($reference === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return null;
+    }
+    $rows = avante_read_jsonl(avante_jsonl_path('accommodation-bookings.jsonl'));
+    for ($i = count($rows) - 1; $i >= 0; $i--) {
+        $row = $rows[$i];
+        $guest = is_array($row['guest'] ?? null) ? $row['guest'] : [];
+        if (strtoupper((string) ($row['reservationRefNo'] ?? '')) === $reference
+            && strtolower((string) ($guest['email'] ?? '')) === $email) {
+            return $row;
+        }
+    }
+    return null;
+}
+
+function avante_find_accommodation_by_reference(string $reference): ?array
+{
+    $reference = strtoupper(trim($reference));
+    if ($reference === '') {
+        return null;
+    }
+    $rows = avante_read_jsonl(avante_jsonl_path('accommodation-bookings.jsonl'));
+    for ($i = count($rows) - 1; $i >= 0; $i--) {
+        if (strtoupper((string) ($rows[$i]['reservationRefNo'] ?? '')) === $reference) {
+            return $rows[$i];
+        }
+    }
+    return null;
 }
 
 function avante_normalize_activity(array $row): array
@@ -123,6 +158,7 @@ function avante_normalize_activity(array $row): array
         'check_out' => '',
         'sent_to' => $sentTo,
         'membership_no' => '',
+        'has_sn_response' => false,
     ];
 }
 

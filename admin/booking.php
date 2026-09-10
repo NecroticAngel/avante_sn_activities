@@ -4,37 +4,17 @@ declare(strict_types=1);
 session_start();
 
 require dirname(__DIR__) . '/api/bookings-store.php';
+require dirname(__DIR__) . '/api/audit-store.php';
+require dirname(__DIR__) . '/includes/admin-auth.php';
 
 $configPath = dirname(__DIR__) . '/config.php';
 $config = is_file($configPath) ? require $configPath : [];
 $adminPassword = (string) ($config['admin_password'] ?? '');
-$error = '';
-
-function avante_admin_logged_in(): bool
-{
-    return !empty($_SESSION['avante_admin']);
-}
+$error = avante_admin_handle_auth($adminPassword, 'booking.php?' . http_build_query($_GET));
 
 function h($value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
-}
-
-if (isset($_GET['logout'])) {
-    $_SESSION = [];
-    session_destroy();
-    header('Location: index.php');
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    $attempt = (string) ($_POST['password'] ?? '');
-    if ($adminPassword !== '' && hash_equals($adminPassword, $attempt)) {
-        $_SESSION['avante_admin'] = true;
-        header('Location: booking.php?' . http_build_query($_GET));
-        exit;
-    }
-    $error = 'That password is not right.';
 }
 
 $booking = null;
@@ -58,6 +38,10 @@ require dirname(__DIR__) . '/includes/header.php';
             <form class="admin-login" method="post">
                 <label>Password
                     <input type="password" name="password" required autofocus>
+                </label>
+                <label class="admin-remember">
+                    <input type="checkbox" name="remember_me" value="1">
+                    Remember me for 30 days
                 </label>
                 <button type="submit" name="login" value="1">Sign in</button>
             </form>
@@ -95,10 +79,36 @@ require dirname(__DIR__) . '/includes/header.php';
                             <a class="admin-add" href="<?php echo h($booking['info_url']); ?>" target="_blank" rel="noopener noreferrer">SN details</a>
                         <?php endif; ?>
                         <?php if ($booking['payment_url'] !== ''): ?>
-                            <a href="<?php echo h($booking['payment_url']); ?>" target="_blank" rel="noopener noreferrer">Pay / portal</a>
+                            <a href="payment.php?ref=<?php echo urlencode((string) $booking['reference']); ?>" target="_blank" rel="noopener noreferrer">Pay / portal</a>
                         <?php endif; ?>
                     </div>
-                    <p class="admin-hint">Stock Network has no documented API to edit or cancel a reservation. Those actions happen on the Stock Network portal.</p>
+                    <?php
+                    $snRecord = avante_find_accommodation_record((string) $booking['reference'], (string) $booking['guest_email']);
+                    $snResponse = is_array($snRecord['sn_response'] ?? null) ? $snRecord['sn_response'] : null;
+                    $auditEvents = avante_booking_audit_events((string) $booking['reference'], (string) $booking['reservation_id']);
+                    ?>
+                    <?php if ($snResponse): ?>
+                        <h3 id="sn-json">Stock Network /request response</h3>
+                        <pre class="admin-json"><?php echo h(json_encode($snResponse, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)); ?></pre>
+                    <?php endif; ?>
+                    <h3>Payment audit trail</h3>
+                    <?php if ($auditEvents): ?>
+                        <ol class="admin-audit-list">
+                            <?php foreach (array_reverse($auditEvents) as $event): ?>
+                                <li>
+                                    <strong><?php echo h(ucwords(str_replace('_', ' ', (string) ($event['event'] ?? 'event')))); ?></strong>
+                                    <span><?php echo h(avante_booking_when((string) ($event['at'] ?? ''))); ?></span>
+                                    <details>
+                                        <summary>Recorded details</summary>
+                                        <pre class="admin-json"><?php echo h(json_encode($event['context'] ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)); ?></pre>
+                                    </details>
+                                </li>
+                            <?php endforeach; ?>
+                        </ol>
+                    <?php else: ?>
+                        <p class="admin-muted">No payment actions have been recorded yet. Opening “Pay / portal” from this admin page will create the first entry.</p>
+                    <?php endif; ?>
+                    <p class="admin-hint">The audit excludes passwords, API tokens and card details. Stock Network hosts the payment page, so the app can record that the portal was opened but cannot see the card form or final gateway response unless Stock Network provides a callback or status API.</p>
                 </div>
             <?php endif; ?>
         <?php endif; ?>

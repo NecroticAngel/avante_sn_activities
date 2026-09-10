@@ -3,38 +3,18 @@ declare(strict_types=1);
 
 session_start();
 
+require dirname(__DIR__) . '/includes/admin-auth.php';
+
 $configPath = dirname(__DIR__) . '/config.php';
 $config = is_file($configPath) ? require $configPath : [];
 $adminPassword = (string) ($config['admin_password'] ?? '');
 $notice = '';
-$error = '';
+$error = avante_admin_handle_auth($adminPassword, 'codes.php');
 $resultJson = '';
-
-function avante_admin_logged_in(): bool
-{
-    return !empty($_SESSION['avante_admin']);
-}
 
 function h($value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
-}
-
-if (isset($_GET['logout'])) {
-    $_SESSION = [];
-    session_destroy();
-    header('Location: index.php');
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    $attempt = (string) ($_POST['password'] ?? '');
-    if ($adminPassword !== '' && hash_equals($adminPassword, $attempt)) {
-        $_SESSION['avante_admin'] = true;
-        header('Location: codes.php');
-        exit;
-    }
-    $error = 'That password is not right.';
 }
 
 $base = '../';
@@ -51,6 +31,10 @@ require dirname(__DIR__) . '/includes/header.php';
             <form class="admin-login" method="post">
                 <label>Password
                     <input type="password" name="password" required autofocus>
+                </label>
+                <label class="admin-remember">
+                    <input type="checkbox" name="remember_me" value="1">
+                    Remember me for 30 days
                 </label>
                 <button type="submit" name="login" value="1">Sign in</button>
             </form>

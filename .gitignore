@@ -2,6 +2,7 @@ config.php
 data/search-options.json
 data/activity-bookings.jsonl
 data/accommodation-bookings.jsonl
+data/booking-audit.jsonl
 data/holiday-packages.jsonl
 data/settings.json
 data/*.cache

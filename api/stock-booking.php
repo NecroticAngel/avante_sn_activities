@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/audit-store.php';
+
 function avante_api_v1_base(array $config): string
 {
     $base = avante_api_base($config);
@@ -262,7 +264,30 @@ function avante_handle_accommodation_booking(array $config, ?array $input = null
         $payload['membershipNo'] = $membershipNo;
     }
 
-    $result = avante_sn_post($config, '/request', $payload);
+    $flowId = bin2hex(random_bytes(8));
+    avante_audit_log('booking_request_sent', [
+        'flowId' => $flowId,
+        'endpoint' => '/request',
+        'request' => $payload,
+    ]);
+    try {
+        $result = avante_sn_post($config, '/request', $payload);
+    } catch (Throwable $error) {
+        avante_audit_log('booking_request_failed', [
+            'flowId' => $flowId,
+            'endpoint' => '/request',
+            'errorType' => get_class($error),
+            'error' => $error->getMessage(),
+        ]);
+        throw $error;
+    }
+    avante_audit_log('booking_response_received', [
+        'flowId' => $flowId,
+        'endpoint' => '/request',
+        'reservationId' => $result['reservationId'] ?? null,
+        'reservationRefNo' => $result['reservationRefNo'] ?? null,
+        'response' => $result,
+    ]);
     $status = (string) ($result['status'] ?? '');
     if ($status === 'Error' || $status === 'NoReservationLineItems' || !empty($result['errorItems'])) {
         throw new RuntimeException(avante_sn_message($result, 'Stock Network could not complete this booking.'));
@@ -270,6 +295,7 @@ function avante_handle_accommodation_booking(array $config, ?array $input = null
 
     $record = [
         'at' => date('c'),
+        'flowId' => $flowId,
         'guest' => [
             'fullName' => $fullName,
             'email' => $email,
@@ -290,12 +316,20 @@ function avante_handle_accommodation_booking(array $config, ?array $input = null
         'status' => $status,
         'paymentUrl' => $result['paymentUrl'] ?? null,
         'reservationInformationUrl' => $result['reservationInformationUrl'] ?? null,
+        'sn_response' => $result,
         'notes' => $notes,
         'membershipNo' => $membershipNo,
     ];
 
     $logPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'accommodation-bookings.jsonl';
-    file_put_contents($logPath, json_encode($record, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND);
+    if (file_put_contents($logPath, json_encode($record, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX) === false) {
+        avante_audit_log('booking_record_write_failed', [
+            'flowId' => $flowId,
+            'reservationId' => $result['reservationId'] ?? null,
+            'reservationRefNo' => $result['reservationRefNo'] ?? null,
+        ]);
+        throw new RuntimeException('The reservation was created, but its local booking record could not be saved. Reference: ' . ($result['reservationRefNo'] ?? 'unknown'));
+    }
 
     require_once __DIR__ . '/settings-store.php';
     require_once __DIR__ . '/activities-store.php';
