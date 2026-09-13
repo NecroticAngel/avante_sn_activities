@@ -62,7 +62,7 @@ require __DIR__ . '/includes/header.php';
                 <div id="activity-booking-message" class="activity-booking-message" hidden></div>
             </div>
         </div>
-    </div>
+        <?php require __DIR__ . '/includes/footer.php'; ?>
     <script>window.AVANTE = { apiUrl: 'api/index.php' };</script>
     <script src="assets/js/activities.js"></script>
 </body>

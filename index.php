@@ -10,22 +10,25 @@
     <link rel="stylesheet" href="assets/css/page.css">
 </head>
 <body class="avante-search-page">
+    <a class="avante-skip-link" href="#main-content">Skip to main content</a>
     <div class="avante-page">
         <header class="avante-page-header">
-            <a class="avante-logo-link" href="index.php">
-                <img src="assets/img/avantetravel.png" alt="Avante Travel">
-            </a>
-            <div class="avante-header-copy">
-                <h1>Search accommodation</h1>
-                <nav class="avante-nav" aria-label="Primary">
+            <a class="avante-brand" href="index.php" aria-label="Avante Travel home">Avante Travel</a>
+            <nav class="avante-nav" aria-label="Primary">
                     <a href="index.php" class="is-active">Accommodation</a>
                     <a href="map.php">Property map</a>
                     <a href="holiday.php">Holiday builder</a>
                     <a href="activities.php">Activities</a>
                     <a href="manage.php">Manage booking</a>
-                </nav>
-            </div>
+                    <!-- Temporary convenience link; remove before production launch. -->
+                    <a href="admin/index.php">Admin</a>
+            </nav>
         </header>
+        <div class="avante-page-heading">
+            <span class="avante-page-kicker">Plan your escape</span>
+            <h1>Search accommodation</h1>
+        </div>
+        <main id="main-content" class="avante-main-content">
 
         <div id="avante-setup-banner" class="avante-setup-banner">
             Add your Stock Network bearer token to <code>config.php</code> (the same token from the WordPress plugin settings) to run live searches. Destination suggestions still work from cached options.
@@ -160,7 +163,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    <?php $base = ''; require __DIR__ . '/includes/footer.php'; ?>
 
     <script>
         window.AVANTE = { apiUrl: 'api/index.php' };

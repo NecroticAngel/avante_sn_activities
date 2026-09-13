@@ -115,7 +115,7 @@ require __DIR__ . '/includes/header.php';
                 <div id="holiday-checkout-message" class="activity-booking-message" hidden></div>
             </div>
         </div>
-    </div>
+        <?php require __DIR__ . '/includes/footer.php'; ?>
     <script>window.AVANTE = { apiUrl: 'api/index.php' };</script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>

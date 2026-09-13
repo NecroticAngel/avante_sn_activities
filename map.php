@@ -80,7 +80,7 @@ require __DIR__ . '/includes/header.php';
         </section>
 
         <noscript><p class="property-map-status is-error">JavaScript is required to display the property map.</p></noscript>
-    </div>
+        <?php require __DIR__ . '/includes/footer.php'; ?>
 
     <script>
         window.AVANTE_MAP = {

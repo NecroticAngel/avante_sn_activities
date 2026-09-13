@@ -84,6 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
             </div>
         <?php endif; ?>
-    </div>
+        <?php require __DIR__ . '/includes/footer.php'; ?>
 </body>
 </html>
