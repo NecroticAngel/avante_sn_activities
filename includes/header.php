@@ -11,11 +11,11 @@ $bodyClass = $bodyClass ?? 'avante-search-page';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
-    <link rel="stylesheet" href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>assets/css/page.css">
     <?php foreach ($extraCss as $href): ?>
         <?php $cssHref = preg_match('#^https?://#i', (string) $href) ? $href : $base . $href; ?>
         <link rel="stylesheet" href="<?php echo htmlspecialchars($cssHref, ENT_QUOTES, 'UTF-8'); ?>">
     <?php endforeach; ?>
+    <link rel="stylesheet" href="<?php echo htmlspecialchars($base, ENT_QUOTES, 'UTF-8'); ?>assets/css/page.css">
 </head>
 <body class="<?php echo htmlspecialchars($bodyClass, ENT_QUOTES, 'UTF-8'); ?>">
     <a class="avante-skip-link" href="#main-content">Skip to main content</a>

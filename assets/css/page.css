@@ -19,11 +19,22 @@
 
 body.avante-search-page {
     margin: 0;
-    font-family: "Noto Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-family: "Segoe UI", Arial, system-ui, sans-serif;
     background: #fff;
     color: var(--avante-ink);
     min-height: 100vh;
     line-height: 1.5;
+    font-style: normal;
+    font-synthesis: none;
+}
+
+body.avante-search-page :where(h1, h2, h3, h4, h5, h6, p, a, span, label, input, select, textarea, button, li, dt, dd, th, td) {
+    font-style: normal !important;
+    font-synthesis: none;
+}
+
+body.avante-search-page :where(input, textarea)::placeholder {
+    font-style: normal !important;
 }
 
 .avante-page {
@@ -45,7 +56,7 @@ body.avante-search-page {
 .avante-brand {
     flex-shrink: 0;
     color: var(--avante-main-color);
-    font-family: Montserrat, "Segoe UI", sans-serif;
+    font-family: "Segoe UI", Arial, sans-serif;
     font-size: clamp(1.55rem, 3vw, 2rem);
     font-weight: 800;
     letter-spacing: 0.02em;
@@ -117,7 +128,7 @@ body.avante-search-page {
     z-index: 1;
     margin: 0;
     color: #fff;
-    font-family: Montserrat, "Segoe UI", sans-serif;
+    font-family: "Segoe UI", Arial, sans-serif;
     font-size: clamp(2rem, 5vw, 3.25rem);
     font-weight: 800;
     letter-spacing: 0.035em;
@@ -249,7 +260,7 @@ body.avante-search-page {
 .avante-footer-grid h2 {
     margin: 0 0 16px;
     color: var(--avante-main-dark);
-    font-family: Montserrat, "Segoe UI", sans-serif;
+    font-family: "Segoe UI", Arial, sans-serif;
     font-size: 1.05rem;
     font-weight: 800;
     letter-spacing: 0.12em;

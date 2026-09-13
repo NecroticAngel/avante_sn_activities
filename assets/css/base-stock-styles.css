@@ -667,7 +667,7 @@ iframe#iframeContent {
 .loading {
     text-align: center;
     padding: 20px;
-    font-style: italic;
+    font-style: normal;
     font-family: "Montserrat", Sans-serif;
     font-size: 26px;
     font-weight: 700;

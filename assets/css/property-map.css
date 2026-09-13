@@ -121,7 +121,7 @@
 .property-popup-image { width: 220px; max-width: 100%; height: 110px; margin: -2px 0 9px; border-radius: 7px; object-fit: cover; }
 .property-popup-link { display: inline-block; border-radius: 7px; padding: 8px 11px; color: #fff !important; background: #d85a30; text-decoration: none; font-size: .75rem; font-weight: 750; }
 .property-popup-link:hover { filter: brightness(1.08); }
-.property-popup-note { max-width: 230px; color: #777; font-size: .73rem; font-style: italic; line-height: 1.4; }
+.property-popup-note { max-width: 230px; color: #777; font-size: .73rem; font-style: normal; line-height: 1.4; }
 
 /* Optional map controls and fullscreen mode. */
 .property-map-map-controls { position: absolute; top: 14px; right: 14px; z-index: 800; display: flex; gap: 8px; }
