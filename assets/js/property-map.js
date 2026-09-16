@@ -23,6 +23,15 @@
     const markerModeSelect = document.getElementById('property-map-marker-mode');
     const loading = document.getElementById('property-map-loading');
     const mapShell = document.querySelector('.property-map-shell');
+    const drawer = document.getElementById('property-drawer');
+    const drawerOverlay = document.getElementById('property-drawer-overlay');
+    const drawerClose = document.getElementById('property-drawer-close');
+    const drawerTitle = document.getElementById('property-drawer-title');
+    const drawerLocation = document.getElementById('property-drawer-location');
+    const drawerForm = document.getElementById('property-drawer-search');
+    const drawerContent = document.getElementById('property-drawer-content');
+    const drawerCheckin = document.getElementById('property-drawer-checkin');
+    const drawerCheckout = document.getElementById('property-drawer-checkout');
 
     const regionColors = {
         'Western Cape (Cape Town & Winelands)': '#7f77dd',
@@ -70,7 +79,9 @@
     let markerMode = 'link';
     let userMarker = null;
     let areaRefreshPending = false;
-    const maxCards = 60;
+    let selectedProperty = null;
+    let drawerReturnFocus = null;
+    const maxCards = 8;
     const iconCache = new Map();
 
     function escapeHtml(value) {
@@ -117,6 +128,13 @@
             encodeURIComponent(record.id) + '&SiteID=' + encodeURIComponent(record.sid);
     }
 
+    function accommodationSearchUrl(record, checkin, checkout) {
+        const params = new URLSearchParams({ destination: record.n || '' });
+        if (checkin) params.set('checkin', checkin);
+        if (checkout) params.set('checkout', checkout);
+        return 'index.php?' + params.toString();
+    }
+
     function markerColor(record) {
         if (markerMode === 'region') return regionColors[record.z] || '#697383';
         if (markerMode === 'rating') {
@@ -138,14 +156,136 @@
         }
     }
 
+    function localDate(daysAhead) {
+        const date = new Date();
+        date.setDate(date.getDate() + daysAhead);
+        return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
+    }
+
+    function firstValue(object, keys, fallback) {
+        for (const key of keys) {
+            if (object && object[key] !== undefined && object[key] !== null && object[key] !== '') return object[key];
+        }
+        return fallback;
+    }
+
+    function itemName(item) {
+        return typeof item === 'string' ? item : firstValue(item, ['name', 'Name', 'description', 'Description'], '');
+    }
+
+    function openPropertyDrawer(record, trigger) {
+        selectedProperty = record;
+        drawerReturnFocus = trigger || document.activeElement;
+        drawerTitle.textContent = record.n || 'Property details';
+        drawerLocation.textContent = [record.c, record.a, record.z].filter(Boolean).join(' · ');
+        drawerCheckin.min = localDate(0);
+        drawerCheckout.min = localDate(1);
+        if (!drawerCheckin.value) drawerCheckin.value = localDate(1);
+        if (!drawerCheckout.value) drawerCheckout.value = localDate(2);
+        drawerContent.innerHTML = '<div class="property-drawer-intro">Select your dates and guests, then load live availability, photos and prices from Stock Network.</div>';
+        drawerOverlay.hidden = false;
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('property-drawer-open');
+        window.setTimeout(() => drawerCheckin.focus(), 50);
+    }
+
+    function closePropertyDrawer() {
+        if (!drawer.classList.contains('is-open')) return;
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        drawerOverlay.hidden = true;
+        document.body.classList.remove('property-drawer-open');
+        if (drawerReturnFocus && document.contains(drawerReturnFocus)) drawerReturnFocus.focus();
+    }
+
+    function resortImages(resort) {
+        const values = firstValue(resort, ['imageLinks', 'images', 'ImageLinks'], []);
+        return (Array.isArray(values) ? values : [values]).map(item => {
+            if (typeof item === 'string') return validHttpUrl(item);
+            return validHttpUrl(firstValue(item, ['url', 'href', 'imageUrl', 'Url'], ''));
+        }).filter(Boolean).slice(0, 6);
+    }
+
+    function unitCapacity(unit) {
+        const direct = Number(firstValue(unit, ['maxOccupancy', 'maximumOccupancy', 'sleeps', 'MaxOccupancy'], 0));
+        if (direct > 0) return direct;
+        const label = String(firstValue(unit, ['unitSize', 'unitSizeName', 'name', 'description'], ''));
+        const match = label.match(/(?:sleep(?:s|er)?|max)\D*(\d+)/i) || label.match(/(\d+)\s*(?:sleeper|people|persons)/i);
+        return match ? Number(match[1]) : 0;
+    }
+
+    function renderPropertyDetails(resort, record, checkin, checkout, guests) {
+        const images = resortImages(resort);
+        const description = firstValue(resort, ['description', 'resortDescription', 'attractions', 'Description'], '');
+        const infoUrl = validHttpUrl(firstValue(resort, ['resortInfoLink', 'infoLink', 'url'], '')) || resortUrl(record);
+        const amenityItems = ['amenities', 'activities', 'experiences'].flatMap(key => {
+            const value = resort[key] || resort[key.charAt(0).toUpperCase() + key.slice(1)] || [];
+            return Array.isArray(value) ? value : [];
+        }).map(itemName).filter(Boolean).filter((value, index, all) => all.indexOf(value) === index).slice(0, 14);
+        const rawUnits = firstValue(resort, ['unitTypes', 'roomTypes', 'units', 'UnitTypes'], []);
+        const units = (Array.isArray(rawUnits) ? rawUnits : []).filter(unit => !unitCapacity(unit) || unitCapacity(unit) >= guests);
+        const gallery = images.length ? '<div class="property-drawer-gallery">' + images.map((url, index) =>
+            '<img class="' + (index === 0 ? 'is-featured' : '') + '" src="' + escapeHtml(url) + '" alt="' + (index === 0 ? escapeHtml(record.n || 'Property') : '') + '" loading="lazy" onerror="this.remove()">'
+        ).join('') + '</div>' : '';
+        const chips = amenityItems.length ? '<section class="property-drawer-section"><h3>Highlights</h3><div class="property-drawer-chips">' +
+            amenityItems.map(name => '<span>' + escapeHtml(name) + '</span>').join('') + '</div></section>' : '';
+        const unitMarkup = units.length ? units.map(unit => {
+            const name = firstValue(unit, ['name', 'unitTypeName', 'unitSize', 'description'], 'Available unit');
+            const details = firstValue(unit, ['description', 'unitDescription', 'unitSizeName'], '');
+            const available = firstValue(unit, ['unitsAvailable', 'availableUnits', 'quantityAvailable'], '');
+            const rate = firstValue(unit, ['rate', 'Rate'], {});
+            const amount = Number(firstValue(rate, ['rate', 'amount', 'price'], firstValue(unit, ['price', 'rateAmount'], 0)));
+            const currency = firstValue(rate, ['currencySymbol', 'currency'], 'R');
+            const capacity = unitCapacity(unit);
+            return '<article class="property-drawer-unit"><div><h4>' + escapeHtml(name) + '</h4>' +
+                (details && details !== name ? '<p>' + escapeHtml(details) + '</p>' : '') +
+                '<div class="property-drawer-unit-meta">' + [capacity ? 'Sleeps ' + capacity : '', available !== '' ? available + ' available' : ''].filter(Boolean).map(escapeHtml).join(' · ') + '</div></div>' +
+                '<div class="property-drawer-unit-action">' + (amount > 0 ? '<strong>' + escapeHtml(currency) + ' ' + amount.toLocaleString() + '</strong>' : '<strong>Live rate</strong>') +
+                '<a href="' + escapeHtml(accommodationSearchUrl(record, checkin, checkout)) + '">Continue booking</a></div></article>';
+        }).join('') : '<div class="property-drawer-empty"><strong>No units fit this party right now.</strong><span>Try different dates or fewer guests.</span></div>';
+
+        drawerContent.innerHTML = gallery + (description ? '<p class="property-drawer-description">' + escapeHtml(description) + '</p>' : '') + chips +
+            '<section class="property-drawer-section"><div class="property-drawer-section-heading"><h3>Available for your stay</h3><span>' + escapeHtml(checkin + ' → ' + checkout) + '</span></div>' + unitMarkup + '</section>' +
+            (infoUrl ? '<a class="property-drawer-external" href="' + escapeHtml(infoUrl) + '" target="_blank" rel="noopener noreferrer">View full Stock Network listing ↗</a>' : '');
+    }
+
+    async function loadPropertyDetails() {
+        const checkin = drawerCheckin.value;
+        const checkout = drawerCheckout.value;
+        if (!selectedProperty || !checkin || !checkout || checkout <= checkin) {
+            drawerContent.innerHTML = '<div class="property-drawer-message is-error">Please choose a check-out date after your check-in date.</div>';
+            return;
+        }
+        drawerCheckout.min = localDate(1) > checkin ? localDate(1) : checkin;
+        const guests = Number(drawerForm.elements.adults.value) + Number(drawerForm.elements.children.value);
+        drawerContent.innerHTML = '<div class="property-drawer-loading"><span class="property-map-spinner"></span><strong>Checking Stock Network live…</strong><small>Photos and availability are loaded on demand.</small></div>';
+        try {
+            const response = await fetch((config.apiUrl || 'api/index.php') + '?action=search', {
+                method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ checkin_date: checkin, checkout_date: checkout, destination: selectedProperty.n || '', resort_id: selectedProperty.id || '', unit_size: '', amenities: [], experiences: [], activities: [] }),
+            });
+            const data = await response.json();
+            if (!response.ok || !data.ok) throw new Error(data.error || 'Availability could not be loaded.');
+            const resorts = Array.isArray(data.stockAvailability) ? data.stockAvailability : [];
+            const resort = resorts.find(item => normalize(firstValue(item, ['resortId', 'resortID', 'id'], '')) === normalize(selectedProperty.id)) ||
+                resorts.find(item => normalize(firstValue(item, ['name', 'resortName', 'resort'], '')) === normalize(selectedProperty.n)) || resorts[0];
+            if (!resort) throw new Error('No live availability was returned for this property and date range.');
+            renderPropertyDetails(resort, selectedProperty, checkin, checkout, guests);
+        } catch (error) {
+            drawerContent.innerHTML = '<div class="property-drawer-message is-error"><strong>We could not load this stay.</strong><span>' + escapeHtml(error.message) + '</span><button type="button" class="property-drawer-retry">Try again</button></div>';
+        }
+    }
+
     function createPropertyMarker(record) {
         const url = resortUrl(record);
         const marker = L.marker([record.lat, record.lon], { icon: markerIcon(markerColor(record)) });
         const place = record.a || record.c || '';
         const meta = escapeHtml(place) + (record.s ? ' &middot; ' + escapeHtml(record.s) : '');
-        const action = url
-            ? '<a class="property-popup-link" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">View on StockNetwork &rarr;</a>'
-            : '<div class="property-popup-note">No direct link on file. Search for this property on <a href="https://stock.stocknetwork.co.za/" target="_blank" rel="noopener noreferrer">StockNetwork</a>.</div>';
+        const action = '<div class="property-popup-actions">' +
+            '<button class="property-popup-link property-popup-book" type="button" data-property-id="' + escapeHtml(record.id) + '">Check availability</button>' +
+            (url ? '<a class="property-popup-link property-popup-link-secondary" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">View on Stock Network</a>' : '') +
+            '</div>';
         marker.bindPopup('<div class="property-popup-name">' + escapeHtml(record.n) + '</div>' +
             '<div class="property-popup-meta">' + meta + '</div>' + action);
         marker.record = record;
@@ -250,6 +390,16 @@
         rating.textContent = record.s || 'Not graded';
         footer.appendChild(rating);
 
+        const bookLink = document.createElement('button');
+        bookLink.type = 'button';
+        bookLink.className = 'property-map-card-book';
+        bookLink.textContent = 'Book';
+        bookLink.setAttribute('aria-label', 'Check availability at ' + (record.n || 'this property'));
+        bookLink.addEventListener('click', event => {
+            event.stopPropagation();
+            openPropertyDrawer(record, bookLink);
+        });
+
         const activities = nearbyActivities(record, 30);
         if (activities.length) {
             const activityButton = document.createElement('button');
@@ -262,10 +412,12 @@
             });
             footer.appendChild(activityButton);
         }
+        footer.appendChild(bookLink);
         content.append(title, location, footer);
         card.append(accent, content);
         card.addEventListener('click', () => focusProperty(marker));
         card.addEventListener('keydown', event => {
+            if (event.target.closest('a, button')) return;
             if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
                 focusProperty(marker);
@@ -537,10 +689,41 @@
     });
     activitySearch.addEventListener('focus', () => renderSearchResults(activitySearch, activityResults, activityMarkers, activityText, () => setActivitiesVisible(true)));
     document.addEventListener('click', event => {
+        const popupBook = event.target.closest('.property-popup-book');
+        if (popupBook) {
+            const marker = propertyMarkers.find(item => item.record.id === popupBook.dataset.propertyId);
+            if (marker) openPropertyDrawer(marker.record, popupBook);
+        }
+        if (event.target.closest('.property-drawer-retry')) loadPropertyDetails();
         if (!event.target.closest('.property-map-search')) {
             closeResults(propertyResults);
             closeResults(activityResults);
         }
+    });
+
+    drawerForm.addEventListener('submit', event => {
+        event.preventDefault();
+        loadPropertyDetails();
+    });
+    drawerCheckin.addEventListener('change', () => {
+        drawerCheckout.min = drawerCheckin.value || localDate(1);
+        if (drawerCheckout.value <= drawerCheckin.value) drawerCheckout.value = '';
+    });
+    drawerClose.addEventListener('click', closePropertyDrawer);
+    drawerOverlay.addEventListener('click', closePropertyDrawer);
+    document.addEventListener('keydown', event => {
+        if (!drawer.classList.contains('is-open')) return;
+        if (event.key === 'Escape') {
+            closePropertyDrawer();
+            return;
+        }
+        if (event.key !== 'Tab') return;
+        const focusable = [...drawer.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), a[href]')];
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     });
 
     refreshAreaButton.addEventListener('click', renderCardsInView);

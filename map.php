@@ -79,13 +79,36 @@ require __DIR__ . '/includes/header.php';
             </div>
         </section>
 
+        <div id="property-drawer-overlay" class="property-drawer-overlay" hidden></div>
+        <aside id="property-drawer" class="property-drawer" role="dialog" aria-modal="true" aria-labelledby="property-drawer-title" aria-hidden="true">
+            <div class="property-drawer-header">
+                <div>
+                    <span class="property-drawer-kicker">Explore this stay</span>
+                    <h2 id="property-drawer-title">Property details</h2>
+                    <p id="property-drawer-location"></p>
+                </div>
+                <button id="property-drawer-close" class="property-drawer-close" type="button" aria-label="Close property details">&times;</button>
+            </div>
+            <form id="property-drawer-search" class="property-drawer-search">
+                <label>Check in<input id="property-drawer-checkin" name="checkin" type="date" required></label>
+                <label>Check out<input id="property-drawer-checkout" name="checkout" type="date" required></label>
+                <label>Adults<select name="adults"><?php for ($i = 1; $i <= 10; $i++): ?><option value="<?php echo $i; ?>"<?php echo $i === 2 ? ' selected' : ''; ?>><?php echo $i; ?></option><?php endfor; ?></select></label>
+                <label>Children<select name="children"><?php for ($i = 0; $i <= 10; $i++): ?><option value="<?php echo $i; ?>"><?php echo $i; ?></option><?php endfor; ?></select></label>
+                <button type="submit">Show live availability</button>
+            </form>
+            <div id="property-drawer-content" class="property-drawer-content" aria-live="polite">
+                <div class="property-drawer-intro">Choose dates to load live photos, property information, amenities, units and prices from Stock Network.</div>
+            </div>
+        </aside>
+
         <noscript><p class="property-map-status is-error">JavaScript is required to display the property map.</p></noscript>
         <?php require __DIR__ . '/includes/footer.php'; ?>
 
     <script>
         window.AVANTE_MAP = {
             propertiesUrl: 'data/properties.json',
-            activitiesUrl: 'data/map-activities.json'
+            activitiesUrl: 'data/map-activities.json',
+            apiUrl: 'api/index.php'
         };
     </script>
     <script src="assets/vendor/leaflet/leaflet.js"></script>

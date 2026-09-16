@@ -431,9 +431,13 @@ function avante_handle_search(array $config): array
     $checkout = trim((string) ($input['checkout_date'] ?? ''));
     $destination = trim((string) ($input['destination'] ?? ''));
     $unitSize = trim((string) ($input['unit_size'] ?? ''));
+    $resortId = trim((string) ($input['resort_id'] ?? ''));
 
-    if ($checkin === '' || $checkout === '' || $destination === '') {
-        throw new RuntimeException('Check-in, check-out, and destination are required.');
+    if ($checkin === '' || $checkout === '' || ($destination === '' && $resortId === '')) {
+        throw new RuntimeException('Check-in, check-out, and a destination or resort are required.');
+    }
+    if ($resortId !== '' && !preg_match('/^[a-f0-9-]{36}$/i', $resortId)) {
+        throw new RuntimeException('The selected resort identifier is invalid.');
     }
 
     $amenities = [];
@@ -462,16 +466,16 @@ function avante_handle_search(array $config): array
             'RegionCode' => null,
         ],
         'Amenities' => $amenities,
-        'unitSizes' => [
-            ['unitSizeId' => $unitSize],
-        ],
+        'unitSizes' => $unitSize !== '' && $unitSize !== 'all'
+            ? [['unitSizeId' => $unitSize]]
+            : [],
         'Geocoordinates' => null,
         'Pricing' => [
             'MinPrice' => (float) ($config['min_price'] ?? 0),
             'MaxPrice' => 50000.0,
         ],
         'searchText' => $destination,
-        'ResortID' => null,
+        'ResortID' => $resortId !== '' ? $resortId : null,
         'GroupStockToMatchDates' => true,
         'ExtendDatesIfNoMatchFound' => true,
         'IgnoreLocationData' => false,

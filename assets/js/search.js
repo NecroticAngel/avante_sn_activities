@@ -680,6 +680,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (form) {
+        var initialDestination = new URLSearchParams(window.location.search).get('destination');
+        var initialCheckin = new URLSearchParams(window.location.search).get('checkin');
+        var initialCheckout = new URLSearchParams(window.location.search).get('checkout');
+        if (initialDestination && form.destination) {
+            form.destination.value = initialDestination;
+        }
+        if (initialCheckin && initialCheckout && form.checkin_date && form.checkout_date) {
+            form.checkin_date.value = initialCheckin;
+            form.checkout_date.value = initialCheckout;
+            var dateRangeInput = form.querySelector('#daterange');
+            if (dateRangeInput) dateRangeInput.value = initialCheckin + ' - ' + initialCheckout;
+        }
+
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             if (moreOptionsContainer) {
